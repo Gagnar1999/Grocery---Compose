@@ -5,28 +5,20 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Search
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -38,6 +30,9 @@ fun HomeScreen() {
 
     val buttons = remember {
         listOf("Top", "Bottom", "Center", "End")
+    }
+    val text = remember {
+        mutableStateOf("")
     }
     Scaffold() {
         Column(
@@ -63,7 +58,7 @@ fun HomeScreen() {
                 modifier = Modifier.padding(start = 16.dp)
             )
 
-            SearchBar()
+            SearchBar(text)
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -110,8 +105,8 @@ fun CategoryBar(selectedIndex: State<Int>, buttons: List<String>, onClick: (Int)
 }
 
 @Composable
-fun SearchBar() {
-    Box(
+fun SearchBar(text: MutableState<String>) {
+    Surface(
         modifier = Modifier
             .fillMaxWidth()
             .padding(start = 20.dp, end = 20.dp, top = 20.dp)
@@ -122,14 +117,34 @@ fun SearchBar() {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
+                .height(45.dp)
                 .padding(start = 20.dp)
         ) {
+
             Icon(Icons.Outlined.Search, "Search")
-            Text(
-                text = "Search Vegetable",
-                color = Color.Black,
-                modifier = Modifier.padding(start = 16.dp)
+
+            TextField(
+                modifier = Modifier
+                    .fillMaxHeight(),
+                colors = TextFieldDefaults.textFieldColors(
+                    backgroundColor = Color.White,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                ),
+                value = text.value,
+                shape = RoundedCornerShape(32.dp),
+                singleLine = true,
+                onValueChange = {
+                    text.value = it
+                },
+                placeholder = {
+                    Text(
+                        text = "Carl Sayuran",
+                        color = Color.Black,
+                        modifier = Modifier.fillMaxHeight()
+                    )
+                },
             )
         }
     }
